@@ -1,7 +1,18 @@
 #include <stdio.h>
-typedef struct{
-    
-}Biblioteca;
+typedef struct Lista_Livros{
+    struct Lista_Livros *inicio;
+    int tam;
+}Lista_Livros;
+
+typedef struct Lista_Usuarios{
+    struct Lista_Usuarios *inicio;
+    int tam;
+}Lista_Usuarios;
+
+typedef struct Lista_Reservas{
+    struct Lista_Reservas *inicio;
+    int tam;
+}Lista_Reservas;
 
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
@@ -24,9 +35,13 @@ typedef struct Reserva{
     Livro idLivro;
 }Reserva;
 
+<<<<<<< HEAD
 void IncluirLivro(L){
+    
 }
 
+=======
+>>>>>>> 567d5f8a020be4fec5b2a0540152a2b58bae486d
 int main(){
 
     return 0;
