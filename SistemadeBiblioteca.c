@@ -5,7 +5,7 @@ typedef struct{
 
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
-}Autor;
+}Autor; //?????
 
 typedef struct Livro{
     int idlivro, ano, edicao;
@@ -24,8 +24,7 @@ typedef struct Reserva{
     Livro idLivro;
 }Reserva;
 
-void IncluirLivro(){
-    int inclusao;
+void IncluirLivro(L){
 }
 
 int main(){
