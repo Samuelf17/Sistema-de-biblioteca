@@ -25,7 +25,7 @@ typedef struct Reserva{
 }Reserva;
 
 void IncluirLivro(){
-    
+    int inclusao;
 }
 
 int main(){
