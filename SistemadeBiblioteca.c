@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 typedef struct Lista_Livros{
     struct Lista_Livros *inicio;
     int tam;
@@ -35,13 +38,18 @@ typedef struct Reserva{
     Livro idLivro;
 }Reserva;
 
-<<<<<<< HEAD
-void IncluirLivro(L){
-    
-}
+void IncluirLivro(Lista_Livros *livro, int idLivro, int ano, int edicao, char titulo[], char editora[]){
+    Livro *novolivro; // ele é ponteiro pra usarmos alocação dinamica
+    novolivro = malloc(sizeof(Livro));
 
-=======
->>>>>>> 567d5f8a020be4fec5b2a0540152a2b58bae486d
+    novolivro->idlivro = idLivro;
+    novolivro->ano = ano;
+    novolivro->edicao = edicao;
+    strcpy(novolivro->tituloLivro,titulo);
+    strcpy(novolivro->tituloLivro,titulo);
+
+}   
+
 int main(){
 
     return 0;
