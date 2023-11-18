@@ -24,6 +24,10 @@ typedef struct Reserva{
     Livro idLivro;
 }Reserva;
 
+void IncluirLivro(){
+    
+}
+
 int main(){
 
     return 0;
