@@ -47,7 +47,7 @@ void IncluirLivro(Lista_Livros *livro, int idLivro, int ano, int edicao, char ti
     novolivro->edicao = edicao;
     strcpy(novolivro->tituloLivro,titulo);
     strcpy(novolivro->tituloLivro,titulo);
-
+    
 }   
 
 int main(){
