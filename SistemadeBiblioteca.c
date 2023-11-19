@@ -3,21 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-typedef struct Lista_Livros{
-    struct Lista_Livros *inicio;
-    int tam;
-}Lista_Livros;
-
-typedef struct Lista_Usuarios{
-    struct Lista_Usuarios *primeiro_usuario;
-    int tam;
-}Lista_Usuarios;
-
-typedef struct Lista_Reservas{
-    struct Lista_Reservas *inicio;
-    int tam;
-}Lista_Reservas;
-
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
 }Autor; //?????
@@ -28,11 +13,22 @@ typedef struct Livro{
     struct Livro *proximoLivro;
     Autor nome;
 }Livro;
+
+typedef struct Lista_Livros{
+    struct Livro *inicio;
+    int tam;
+}Lista_Livros;
+
 typedef struct Usuario{
     int idUser, telefone;
     char nomeUser[100],endereco[200];
     struct Usuario *proximoUsuario; // 
 }Usuario;
+
+typedef struct Lista_Usuarios{
+    struct Usuario *primeiro_usuario;
+    int tam;
+}Lista_Usuarios;
 
 typedef struct Reserva{
     int dataInicio, dataFim;
@@ -40,6 +36,11 @@ typedef struct Reserva{
     Livro idLivro;
     struct Reserva *proximoReserva;
 }Reserva;
+
+typedef struct Lista_Reservas{
+    struct Reserva *inicio;
+    int tam;
+}Lista_Reservas;
 
 void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, char titulo[], char editora[]){
     Livro *novolivro, *aux; // ele é ponteiro pra usarmos alocação dinamica
