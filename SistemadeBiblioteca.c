@@ -90,11 +90,6 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, int telefone, char Nome
     caderno->tam++;
 }
 
-/*for(int i=1; i<biblioteca->tam; i++){ TESTAR DEPOIS
-            biblioteca+=i;
-        }
-        biblioteca->inicio->*/
-
 int main(){
     
     int *num;
