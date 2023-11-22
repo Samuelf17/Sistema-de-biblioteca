@@ -47,7 +47,6 @@ typedef struct Lista_Reservas{
     int tam;
 }Lista_Reservas;
 
-
 void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, char titulo[], char editora[]){
     Livro *novolivro, *aux; // ele é ponteiro pra usarmos alocação dinamica
     novolivro = malloc(sizeof(Livro));
@@ -131,27 +130,25 @@ void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
         novousuario = novousuario->proximoUsuario;
     }
 
-
-    
     printf("O que deseja alterar? 1)Nome \n 2) Telefone \n 3)Endereço");
     scanf("%d", &resposta);
     switch (resposta){
     case 1: 
         printf("Digite o novo nome\n");
-        scanf("%[^\n]", novousuario->nomeUser);
+        scanf(" %[^\n]", novousuario->nomeUser);
         break;
     case 2:
         printf("Digite o numero do novo telefone");
-        scanf("%lld", &novousuario->telefone);
+        scanf(" %[^\n]", novousuario->telefone);
         break;
     case 3:
         printf("Digite o novo endereço");
-        scanf("&[^\n]", novousuario->endereco);
-    
-    default:
+        scanf(" %[^\n]", novousuario->endereco);
+
         break;
+    default:
+        printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
     }
-        
 }
 
 int main(){
@@ -174,18 +171,16 @@ int main(){
         scanf(" %d", &resMenu);
         switch(resMenu){
             case 1:
-                /*IDEIA QUE EU QUERO MELHORAR:
-                    Usar outro switch case para as opções de Inclusão, alteração e exclusão de usuário, livros e reservas
-                    Obs: Essa ideia não me agrada kkkkkkkkkkkkkk
-                */
                 system("cls");
-                //Fiz o codigo para ver se penso em algo ou me acostumo com ele
+
                 printf("Menu:\n");
                 printf("1.Incluir usuario\n");
                 printf("2.Alterar usuario\n");
                 printf("3.Excluir usuario\n");
                 printf("4.Voltar\n");
+                printf("Digite a opção que você deseja: ");
                 scanf(" %d", &resSubMenu);
+                
                 switch(resSubMenu){
                     case 1:
                         system("cls");
@@ -208,17 +203,18 @@ int main(){
                         break;
                     default:
                         printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
-                        
                 }
                 break;
+
             case 2:
-               system("cls");
-                //Fiz o codigo para ver se penso em algo ou me acostumo com ele
+                system("cls");
+
                 printf("Menu:\n");
                 printf("1.Incluir Livro\n");
                 printf("2.Alterar Livro\n");
                 printf("3.Excluir Livro\n");
                 printf("4.Voltar\n");
+                printf("Digite a opção que você deseja: ");
                 scanf(" %d", &resSubMenu);
 
                 switch(resSubMenu){
@@ -237,8 +233,14 @@ int main(){
                       //  IncluirLivro(&cadernoLivros, idLivro++, nomeLivro, edicaoLivro, editora);
                         system("pause");
                         break;
-                    
-
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
                 }
                 break;
                 
@@ -246,17 +248,29 @@ int main(){
                 system("cls");
                 break;
             case 4:
-                printf("1. Relatorio de Usuários\n");
-                printf("2. Relatorio de Livros\n");
-                printf("3. Relatorio de Reservas\n");
+                system("cls");
+
+                printf("1. Relatório de Usuários\n");
+                printf("2. Relatório de Livros\n");
+                printf("3. Relatório de Reservas\n");
                 printf("4. Voltar\n");
+                printf("Digite a opção que você deseja: ");
                 scanf(" %d", &resSubMenu);
+
                 switch(resSubMenu){
                     case 1:
                         system("cls");
                         RelatorioUsuario(cadernoUsuarios);
                         system("pause");
                         break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
                 }
                 system("cls");
                 break;
