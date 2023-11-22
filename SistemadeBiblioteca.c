@@ -92,7 +92,32 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, int telefone, char Nome
 
 int main(){
     
-    int *num;
+    int num=1;
+
+    while(num != 0){
+        printf("Menu:\n");
+        printf("1.Usuario\n");
+        printf("2.Livro\n");
+        printf("3.Reserva\n");
+        printf("4.Relatorios\n");
+        printf("5.Sair\n");
+        printf("Digite a opção que você deseja: ");
+        scanf(" %d", &num);
+        switch(num){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                printf("A opcao desejada nao existe.\nPor favor digite uma das opcoes do menu.");
+        }
+    }
 
     return 0;
 }
