@@ -20,7 +20,8 @@ typedef struct Lista_Livros{
 }Lista_Livros;
 
 typedef struct Usuario{
-    int idUser, telefone;
+    int idUser;
+    long long int telefone;
     char nomeUser[100],endereco[200];
     struct Usuario *proximoUsuario; // 
 }Usuario;
@@ -66,32 +67,39 @@ void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, ch
     biblioteca->tam++;
 }   
 
-void IncluirUsuario(Lista_Usuarios *caderno, int idUser, int telefone, char NomeUser[],char endereco[] ){
+void IncluirUsuario(Lista_Usuarios *caderno, int idUser, long long int telefone, char NomeUser[],char endereco[] ){
     Usuario *novousuario , *usuario;
     novousuario=malloc(sizeof(Usuario));
+    if(novousuario){
+        novousuario->idUser = idUser;
+        novousuario->telefone=telefone;
+        strcpy(novousuario->nomeUser,NomeUser);
+        strcpy(novousuario->endereco,endereco);
 
-    novousuario->idUser = idUser;
-    novousuario->telefone=telefone;
-    strcpy(novousuario->nomeUser,NomeUser);
-    strcpy(novousuario->endereco,endereco);
+        novousuario->proximoUsuario=NULL; // quando cria um usuario, eu tenho  certeza que ele é o ultimo ate então, por isso o proximo é nulo;
 
-    novousuario->proximoUsuario=NULL; // quando cria um usuario, eu tenho  certeza que ele é o ultimo ate então, por isso o proximo é nulo;
-
-   if(caderno->primeiro_usuario == NULL){
-        caderno->primeiro_usuario = novousuario;
-    }else{
-        usuario = caderno->primeiro_usuario;
-        while(usuario->proximoUsuario !=NULL){
-            usuario=usuario->proximoUsuario;
+    if(caderno->primeiro_usuario == NULL){
+            caderno->primeiro_usuario = novousuario;
+        }else{
+            usuario = caderno->primeiro_usuario;
+            while(usuario->proximoUsuario !=NULL){
+                usuario=usuario->proximoUsuario;
+            }
+            usuario->proximoUsuario = novousuario; // agora que eu sei que o proximo usuario está vazio por conta do loop eu posso escrever um novo;
         }
-        usuario->proximoUsuario = novousuario; // agora que eu sei que o proximo usuario está vazio por conta do loop eu posso escrever um novo;
+        caderno->tam++;
+        printf("\nUsuario cadastrado com sucesso!\n");
+    }else{
+        printf("\nErro ao alocar memória!\n");
     }
-    caderno->tam++;
 }
 
 int main(){
     setlocale(LC_ALL,"Portuguese");
-    int resMenu=1, resSubMenu;
+    int resMenu=1, resSubMenu, idUser=1, idLivro, telefone, edicaoLivro;
+    char nomeUSer[50], endereco[100], nomeLivro[100], editora[50];
+    Lista_Usuarios cadernoUsuarios;
+    cadernoUsuarios.primeiro_usuario=NULL;
 
     while(resMenu != 5){
         printf("Menu:\n");
@@ -118,6 +126,15 @@ int main(){
                 scanf(" %d", &resSubMenu);
                 switch(resSubMenu){
                     case 1:
+                        system("cls");
+                        printf("Digite o nome do usuário: ");
+                        scanf(" %[^\n]", nomeUSer);
+                        printf("Digite o endereço do usuário: ");
+                        scanf(" %[^\n]", endereco);
+                        printf("Digite o telefone do usuario: ");
+                        scanf(" %d", &telefone);
+                        IncluirUsuario(&cadernoUsuarios, idUser++, telefone, nomeUSer, endereco);
+                        system("pause");
                         break;
                     case 2:
                         break;
@@ -145,6 +162,7 @@ int main(){
             default:
                 printf("A opção digitada não existe.\nPor favor digite uma das opções do menu.");
         }
+        system("cls");
     }
 
     return 0;
