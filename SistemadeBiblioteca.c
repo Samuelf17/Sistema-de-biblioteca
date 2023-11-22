@@ -5,13 +5,18 @@
 
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
+    struct Autor *proximoAutor;
 }Autor; //?????
 
+typedef struct Lista_Autor{
+    Autor *inicioautor;
+    int tam;
+
+}Lista_Autor;
 typedef struct Livro{
     int idlivro, ano, edicao;
     char tituloLivro[100], editora[100];
     struct Livro *proximoLivro;
-    Autor nome;
 }Livro;
 
 typedef struct Lista_Livros{
@@ -94,11 +99,16 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, long long int telefone,
     }
 }
 
+
+
+
 int main(){
     setlocale(LC_ALL,"Portuguese");
-    int resMenu=1, resSubMenu, idUser=1, idLivro, telefone, edicaoLivro;
+    int resMenu=1, resSubMenu, idUser=1, idLivro=1, telefone, edicaoLivro;
     char nomeUSer[50], endereco[100], nomeLivro[100], editora[50];
     Lista_Usuarios cadernoUsuarios;
+    Lista_Livros cadernoLivros;
+    cadernoLivros.inicio=NULL;
     cadernoUsuarios.primeiro_usuario=NULL;
 
     while(resMenu != 5){
@@ -143,13 +153,40 @@ int main(){
                     case 4:
                         break;
                     default:
-                        printf("A opção digitada não existe.\nPor favor digite uma das opções do menu.");
+                        printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
                         
                 }
                 break;
             case 2:
-                system("cls");
+               system("cls");
+                //Fiz o codigo para ver se penso em algo ou me acostumo com ele
+                printf("Menu:\n");
+                printf("1.Incluir Livro\n");
+                printf("2.Alterar Livro\n");
+                printf("3.Excluir Livro\n");
+                printf("4.Voltar\n");
+                scanf(" %d", &resSubMenu);
+
+                switch(resSubMenu){
+                    case 1:
+                        system("cls");
+                        printf("Digite o titulo do livro: ");
+                        scanf(" %[^\n]", nomeLivro);
+
+                        printf("Digite o autor do livro: "); // Será possivel adicionar mais de um autor;
+                        
+                        scanf(" %d", &telefone);
+                        printf("Digite o numero de edição do livro ");
+                        scanf(" %d", &edicaoLivro);
+                        printf("Digite o nome da editoria do livro: ");
+                        scanf("%[^\n]", editora);
+                        IncluirLivro(&cadernoLivros, idLivro++, nomeLivro, edicaoLivro, editora);
+                        system("pause");
+                        break;
+                
+                
                 break;
+                
             case 3:
                 system("cls");
                 break;
@@ -160,7 +197,7 @@ int main(){
                 printf("\nObrigado por usar o programa\n");
                 break;
             default:
-                printf("A opção digitada não existe.\nPor favor digite uma das opções do menu.");
+                printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
         }
         system("cls");
     }
