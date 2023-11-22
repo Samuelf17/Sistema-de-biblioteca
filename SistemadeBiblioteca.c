@@ -99,7 +99,42 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, long long int telefone,
     }
 }
 
+void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
+    int resposta;
+    Usuario *novousuario;
+    Usuario *aux;
+    novousuario = cadernoUsuario->primeiro_usuario;
 
+    int idAltera;
+    printf("Digite a ID do usuario que deseja alterar");
+    scanf("%d", &idAltera);
+
+    while(novousuario->idUser != idAltera){
+        novousuario = novousuario->proximoUsuario;
+    }
+
+
+    
+    printf("O que deseja alterar? 1)Nome \n 2) Telefone \n 3)Endereço");
+    scanf("%d", &resposta);
+    switch (resposta){
+    case 1: 
+        printf("Digite o novo nome\n");
+        scanf("%[^\n]", novousuario->nomeUser);
+        break;
+    case 2:
+        printf("Digite o numero do novo telefone");
+        scanf("%lld", &novousuario->telefone);
+        break;
+    case 3:
+        printf("Digite o novo endereço");
+        scanf("&[^\n]", novousuario->endereco);
+    
+    default:
+        break;
+    }
+        
+}
 
 
 int main(){
@@ -147,6 +182,8 @@ int main(){
                         system("pause");
                         break;
                     case 2:
+                        AlterarUsuario(&cadernoUsuarios);
+                        system("pause");
                         break;
                     case 3:
                         break;
@@ -180,7 +217,7 @@ int main(){
                         scanf(" %d", &edicaoLivro);
                         printf("Digite o nome da editoria do livro: ");
                         scanf("%[^\n]", editora);
-                        IncluirLivro(&cadernoLivros, idLivro++, nomeLivro, edicaoLivro, editora);
+                      //  IncluirLivro(&cadernoLivros, idLivro++, nomeLivro, edicaoLivro, editora);
                         system("pause");
                         break;
                 
@@ -198,6 +235,7 @@ int main(){
                 break;
             default:
                 printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
+        }
         }
         system("cls");
     }
