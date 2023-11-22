@@ -1,7 +1,7 @@
- #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
+#include <locale.h>
 
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
@@ -43,7 +43,7 @@ typedef struct Lista_Reservas{
 }Lista_Reservas;
 
 void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, char titulo[], char editora[]){
-    Livro *novolivro, *aux; // ele Ã© ponteiro pra usarmos alocaÃ§Ã£o dinamica
+    Livro *novolivro, *aux; // ele ?? ponteiro pra usarmos aloca????o dinamica
     novolivro = malloc(sizeof(Livro));
 
     novolivro->idlivro = idLivro;
@@ -75,7 +75,7 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, int telefone, char Nome
     strcpy(novousuario->nomeUser,NomeUser);
     strcpy(novousuario->endereco,endereco);
 
-    novousuario->proximoUsuario=NULL; // quando cria um usuario, eu tenho  certeza que ele Ã© o ultimo ate entÃ£o, por isso o proximo Ã© nulo;
+    novousuario->proximoUsuario=NULL; // quando cria um usuario, eu tenho  certeza que ele ?? o ultimo ate ent??o, por isso o proximo ?? nulo;
 
 
    if(caderno->primeiro_usuario == NULL){
@@ -85,32 +85,40 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, int telefone, char Nome
         while(usuario->proximoUsuario !=NULL){
             usuario=usuario->proximoUsuario;
         }
-        usuario->proximoUsuario = novousuario; // agora qu eu sei que o proximo usuario estÃ¡ vazio por conta do loop eu posso escrever um novo;
+        usuario->proximoUsuario = novousuario; // agora qu eu sei que o proximo usuario est?? vazio por conta do loop eu posso escrever um novo;
     }
     caderno->tam++;
 }
 
 int main(){
-    
+    setlocale(LC_ALL,"Portuguese");
     int num=1;
 
-    while(num != 0){
+    while(num != 5){
         printf("Menu:\n");
-        printf("1.Usuario\n");
+        printf("1.Usuário\n");
         printf("2.Livro\n");
         printf("3.Reserva\n");
-        printf("4.Relatorios\n");
+        printf("4.Relatórios\n");
         printf("5.Sair\n");
-        printf("Digite a opÃ§Ã£o que vocÃª deseja: ");
+        printf("Digite a opção que você deseja: ");
         scanf(" %d", &num);
         switch(num){
             case 1:
+                system("cls");
+                /*IDEIA QUE EU QUERO MELHORAR:
+                    Usar outro switch case para as opções de Inclusão, alteração e exclusão de usuário, livros e reservas
+                    Obs: Essa ideia não me agrada kkkkkkkkkkkkkk
+                */
                 break;
             case 2:
+                system("cls");
                 break;
             case 3:
+                system("cls");
                 break;
             case 4:
+                system("cls");
                 break;
             case 5:
                 break;
