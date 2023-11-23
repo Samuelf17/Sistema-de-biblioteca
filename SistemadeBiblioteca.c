@@ -3,10 +3,19 @@
 #include <string.h>
 #include <locale.h>
 
+/* IDEIA PARA INCLUIR OS AUTORES NO LIVRO:
+    *COLOCAR UM PONTEIRO DA PRIMEIRO POSIÇÃO DA LISTA DE AUTORES NA ESTRUTURA LIVRO
+    PARA ADIOCIONAR O AUTOR:
+        * PEDIR O USUARIO A QUANTIDADE DE AUTORES QUE HÁ NO LIVRO
+        * MANDAR COMO PARAMETRO PARA A FUNÇÃO incluirLivro A QTD DE AUTORES
+        * CRIAR UMA NOVA LISTA DE AUTORES
+        * CRIAR UM LOOP NA FUNCAO PARA CHAMAR A FUNCAO DE INCLUIR AUTORES
+        * QUANDO FOR PERCORRER OS LIVROS, PERCORRER AO MESMO TEMPO A LISTA DE AUTORES
+*/
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
     struct Autor *proximoAutor;
-}Autor; //?????
+}Autor; //????? 
 
 typedef struct Lista_Autor{
     Autor *inicioautor;
@@ -76,7 +85,7 @@ void iniciarListaUsuario(Lista_Usuarios *caderno){
     caderno->tam = 0;
 }
 
-void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char NomeUser[],char endereco[] ){
+void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char NomeUser[], char endereco[] ){
     Usuario *novousuario , *usuario;
     novousuario=malloc(sizeof(Usuario));
     if(novousuario){
@@ -187,6 +196,7 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
         printf("\n Não há usuarios cadastrados \n");
     }
 }
+
 int main(){
     setlocale(LC_ALL,"Portuguese");
     int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro;
