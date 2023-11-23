@@ -103,10 +103,9 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char N
     }
 }
 
-void RelatorioUsuario(Lista_Usuarios caderno){
+void RelatorioUsuario(Lista_Usuarios *caderno){
     Usuario *usuario;
-    usuario = caderno.primeiro_usuario;
-    printf("Relatório de Usuários:\n\n");
+    usuario = caderno->primeiro_usuario;
     while(usuario){
         printf(" | Id: %d", usuario->idUser);
         printf(" | Nome: %s", usuario->nomeUser);
@@ -119,30 +118,32 @@ void RelatorioUsuario(Lista_Usuarios caderno){
 void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
     int resposta;
     Usuario *novousuario;
-    Usuario *aux;
     novousuario = cadernoUsuario->primeiro_usuario;
 
     int idAltera;
-    printf("Digite a ID do usuario que deseja alterar");
+    RelatorioUsuario(cadernoUsuario);
+    printf("Digite a ID do usuario que deseja alterar\n");
+
     scanf("%d", &idAltera);
 
     while(novousuario->idUser != idAltera){
         novousuario = novousuario->proximoUsuario;
     }
-
-    printf("O que deseja alterar? 1)Nome \n 2) Telefone \n 3)Endereço");
+    system("cls");
+    printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
+    printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
     scanf("%d", &resposta);
     switch (resposta){
     case 1: 
-        printf("Digite o novo nome\n");
+        printf("Digite o novo nome: ");
         scanf(" %[^\n]", novousuario->nomeUser);
         break;
     case 2:
-        printf("Digite o numero do novo telefone");
+        printf("Digite o numero do novo telefone: ");
         scanf(" %[^\n]", novousuario->telefone);
         break;
     case 3:
-        printf("Digite o novo endereço");
+        printf("Digite o novo endereço: ");
         scanf(" %[^\n]", novousuario->endereco);
 
         break;
@@ -151,6 +152,41 @@ void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
     }
 }
 
+void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
+    Usuario *usuarioremovido;
+    Usuario *aux;
+    int idExcluido;
+    aux =cadernoUsuario->primeiro_usuario;
+    usuarioremovido = cadernoUsuario->primeiro_usuario;
+    if(cadernoUsuario->primeiro_usuario){
+
+    RelatorioUsuario(cadernoUsuario);
+    printf("Digite a ID do usuario que deseja apagar\n");
+    
+    scanf("%d", &idExcluido);
+    
+    if(aux->idUser == idExcluido){
+        
+        cadernoUsuario->primeiro_usuario= aux->proximoUsuario;
+        usuarioremovido=aux;
+
+    }else{
+    
+    while(aux->proximoUsuario->idUser!=idExcluido && aux->proximoUsuario != NULL){
+        aux = aux->proximoUsuario;
+    }
+
+    usuarioremovido = aux->proximoUsuario;
+    aux->proximoUsuario = usuarioremovido->proximoUsuario;
+    }
+
+    printf("O seguinte usuario foi apagado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",usuarioremovido->idUser ,usuarioremovido->nomeUser , usuarioremovido->telefone, usuarioremovido->endereco);
+        
+    free(usuarioremovido);
+    }else{
+        printf("\n Não há usuarios cadastrados \n");
+    }
+}
 int main(){
     setlocale(LC_ALL,"Portuguese");
     int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro;
@@ -194,10 +230,14 @@ int main(){
                         system("pause");
                         break;
                     case 2:
+                        system("cls");
                         AlterarUsuario(&cadernoUsuarios);
                         system("pause");
                         break;
                     case 3:
+                        system("cls");
+                        ExcluirUsuario(&cadernoUsuarios);
+                        system("pause");
                         break;
                     case 4:
                         break;
@@ -249,7 +289,7 @@ int main(){
                 break;
             case 4:
                 system("cls");
-
+                
                 printf("1. Relatório de Usuários\n");
                 printf("2. Relatório de Livros\n");
                 printf("3. Relatório de Reservas\n");
@@ -260,7 +300,8 @@ int main(){
                 switch(resSubMenu){
                     case 1:
                         system("cls");
-                        RelatorioUsuario(cadernoUsuarios);
+                        printf("Relatório de Usuários:\n\n");
+                        RelatorioUsuario(&cadernoUsuarios);
                         system("pause");
                         break;
                     case 2:

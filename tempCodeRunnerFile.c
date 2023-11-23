@@ -1,2 +1,2 @@
- printf("%d\n", novousuario->idUser);
-        printf("%s\n", novousuario->nomeUser);
+
+    while(aux->proximoUsuario->idUser != idExcluido){
