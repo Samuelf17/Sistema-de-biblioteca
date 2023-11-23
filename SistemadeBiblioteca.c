@@ -5,10 +5,9 @@
 
 /* IDEIA PARA INCLUIR OS AUTORES NO LIVRO:
     *COLOCAR UM PONTEIRO DA PRIMEIRO POSIÇÃO DA LISTA DE AUTORES NA ESTRUTURA LIVRO
-    PARA ADIOCIONAR O AUTOR:
-        * PEDIR O USUARIO A QUANTIDADE DE AUTORES QUE HÁ NO LIVRO
+    PARA ADIOCIONAR O AUTOR
         * MANDAR COMO PARAMETRO PARA A FUNÇÃO incluirLivro A QTD DE AUTORES
-        * CRIAR UMA NOVA LISTA DE AUTORES
+        * CRIAR UMA NOVA LISTA DE AUTORES x
         * CRIAR UM LOOP NA FUNCAO PARA CHAMAR A FUNCAO DE INCLUIR AUTORES
         * QUANDO FOR PERCORRER OS LIVROS, PERCORRER AO MESMO TEMPO A LISTA DE AUTORES
 */
@@ -26,6 +25,7 @@ typedef struct Livro{
     int idlivro, ano, edicao;
     char tituloLivro[100], editora[100];
     struct Livro *proximoLivro;
+    Autor *primeiroautor;
 }Livro;
 
 typedef struct Lista_Livros{
@@ -56,15 +56,67 @@ typedef struct Lista_Reservas{
     int tam;
 }Lista_Reservas;
 
+void IniciaAutor(Lista_Autor *cadernoAutor){
+    cadernoAutor->inicioautor=NULL;
+    cadernoAutor->tam=0;
+}
+
+void IncluirAutor(Lista_Autor *cadernoAutor, char nomeAutor[], char instituicao[]){
+    Autor *novoAutor;
+    novoAutor = malloc(sizeof(Autor));
+    Autor *aux;
+
+    strcpy(novoAutor->nomeA,nomeAutor);
+    strcpy(novoAutor->instituicao,instituicao);
+    novoAutor->proximoAutor=NULL;
+    if(cadernoAutor->inicioautor==NULL){
+        cadernoAutor->inicioautor=novoAutor;
+    }else{
+        aux = cadernoAutor->inicioautor;
+        while(aux->proximoAutor!=NULL){
+            aux=aux->proximoAutor;
+        }
+
+        aux->proximoAutor=novoAutor;
+        cadernoAutor->tam++;
+    }
+
+}
+
+void IniciaListaLivro(Lista_Livros *biblioteca){
+    biblioteca->primeiroLivro=NULL;
+    biblioteca->tam=0;
+}
+
 void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, char titulo[], char editora[]){
+   int resp;
+   char autor[100], instituicao[100];
     Livro *novolivro, *aux; // ele é ponteiro pra usarmos alocação dinamica
+    Lista_Autor cadernoautor;
+    IniciaAutor(&cadernoautor);
+
     novolivro = malloc(sizeof(Livro));
+
+    do{
+        printf("Digite o nome do autor: ");
+        scanf(" %[^\n]", autor);
+        printf("Digite o nome da Instituição: ");
+        scanf(" %[^\n]", instituicao);
+        IncluirAutor(&cadernoautor,autor,instituicao);
+
+        printf("Deseja adicionar mais autores? \n1) - Sim \n2)- Não \n\n");
+        scanf("%d",&resp);
+        if(resp != 2){
+            system("cls");
+        }
+    }while(resp!=2);
 
     novolivro->idlivro = idLivro;
     novolivro->ano = ano;
     novolivro->edicao = edicao;
     strcpy(novolivro->tituloLivro,titulo);
-    strcpy(novolivro->tituloLivro,titulo);
+    strcpy(novolivro->editora,editora);
+    novolivro->primeiroautor = cadernoautor.inicioautor;
     novolivro->proximoLivro=NULL;
 
     if(biblioteca->primeiroLivro==NULL){
@@ -78,7 +130,52 @@ void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, ch
         aux->proximoLivro = novolivro;
     }
     biblioteca->tam++;
+    printf("\nLivro incluido com sucesso!\n");
 }   
+
+void RelatorioLivros(Lista_Livros *biblioteca){
+    Livro *livros;
+    livros = biblioteca->primeiroLivro;
+    Autor *autores;
+    autores = livros->primeiroautor;
+    if(livros){
+        while(livros){
+            autores = livros->primeiroautor;
+            printf("Id: %d |", livros->idlivro);
+            printf(" Nome: %s|", livros->tituloLivro);
+            printf(" Edição: %d  |", livros->edicao);
+            printf(" Editora: %s |", livros->editora);
+            printf(" Ano: %d |", livros->ano);
+            while(autores){
+                printf(" Autor: %s |", autores->nomeA);
+                printf(" Instituição: %s |", autores->instituicao);
+                autores=autores->proximoAutor;
+            }
+            printf("\n\n");
+            livros=livros->proximoLivro;
+        }
+    }else{
+        printf("\nBiblioteca vazia\n");
+    }
+}
+
+void AlterarLivro(Lista_Livros *biblioteca){
+    Livro *livroAlterado;
+    int idAlteraLivro;
+    livroAlterado = biblioteca->primeiroLivro;
+    RelatorioLivros(biblioteca);
+    printf("Digite o ID do livro que deseja fazer alteraçoes\n");
+    scanf(" %d", &idAlteraLivro);
+
+    while(livroAlterado->idlivro!=idAlteraLivro){
+        livroAlterado=livroAlterado->proximoLivro;
+    }
+    printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
+    system("pause");
+
+    printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Ano \n4)Editora\n");
+}
+
 
 void iniciarListaUsuario(Lista_Usuarios *caderno){
     caderno->primeiro_usuario = NULL;
@@ -115,12 +212,16 @@ void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char N
 void RelatorioUsuario(Lista_Usuarios *caderno){
     Usuario *usuario;
     usuario = caderno->primeiro_usuario;
-    while(usuario){
-        printf(" | Id: %d", usuario->idUser);
-        printf(" | Nome: %s", usuario->nomeUser);
-        printf(" | Endereço: %s", usuario->endereco);
-        printf(" | Telefone: %s\n", usuario->telefone);
-        usuario=usuario->proximoUsuario;
+    if(usuario){
+        while(usuario){
+            printf(" | Id: %d", usuario->idUser);
+            printf(" | Nome: %s", usuario->nomeUser);
+            printf(" | Endereço: %s", usuario->endereco);
+            printf(" | Telefone: %s\n", usuario->telefone);
+            usuario=usuario->proximoUsuario;
+        }
+    }else{
+        printf("\nSem usuários cadastrados\n");
     }
 }
 
@@ -199,12 +300,15 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
 
 int main(){
     setlocale(LC_ALL,"Portuguese");
-    int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro;
+    int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro, anoLivro;
     char nomeUSer[50], endereco[100], nomeLivro[100], editora[50], telefone[15];
     Lista_Usuarios cadernoUsuarios;
     Lista_Livros biblioteca;
+    Lista_Autor cadernoAutores;
 
     iniciarListaUsuario(&cadernoUsuarios);
+    IniciaListaLivro(&biblioteca);
+    IniciaAutor(&cadernoAutores);
 
     while(resMenu != 5){
         printf("Menu:\n");
@@ -272,18 +376,19 @@ int main(){
                         system("cls");
                         printf("Digite o titulo do livro: ");
                         scanf(" %[^\n]", nomeLivro);
-
-                        printf("Digite o autor do livro: "); // Será possivel adicionar mais de um autor;
-                        
-                        scanf(" %d", &telefone);
-                        printf("Digite o numero de edição do livro ");
+                        printf("Digite o numero de edição do livro: ");
                         scanf(" %d", &edicaoLivro);
-                        printf("Digite o nome da editoria do livro: ");
-                        scanf("%[^\n]", editora);
-                      //  IncluirLivro(&cadernoLivros, idLivro++, nomeLivro, edicaoLivro, editora);
+                        printf("Digite o nome da editora do livro: ");
+                        scanf(" %[^\n]", editora);
+                        printf("Digite o ano de lançamento do livro: ");
+                        scanf(" %d", &anoLivro);
+                        IncluirLivro(&biblioteca, idLivro++, anoLivro, edicaoLivro, nomeLivro,editora);
                         system("pause");
                         break;
                     case 2:
+                    system("cls");
+                    AlterarLivro(&biblioteca);
+                    system("pause");
                         break;
                     case 3:
                         break;
@@ -310,11 +415,15 @@ int main(){
                 switch(resSubMenu){
                     case 1:
                         system("cls");
-                        printf("Relatório de Usuários:\n\n");
+                        printf("Relatório de Usuários:\n");
                         RelatorioUsuario(&cadernoUsuarios);
                         system("pause");
                         break;
                     case 2:
+                        system("cls");
+                        printf("Relatório de livros:\n");
+                        RelatorioLivros(&biblioteca);
+                        system("pause");
                         break;
                     case 3:
                         break;
