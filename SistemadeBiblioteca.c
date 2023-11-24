@@ -3,14 +3,6 @@
 #include <string.h>
 #include <locale.h>
 
-/* IDEIA PARA INCLUIR OS AUTORES NO LIVRO:
-    *COLOCAR UM PONTEIRO DA PRIMEIRO POSIÇÃO DA LISTA DE AUTORES NA ESTRUTURA LIVRO
-    PARA ADIOCIONAR O AUTOR
-        * MANDAR COMO PARAMETRO PARA A FUNÇÃO incluirLivro A QTD DE AUTORES
-        * CRIAR UMA NOVA LISTA DE AUTORES x
-        * CRIAR UM LOOP NA FUNCAO PARA CHAMAR A FUNCAO DE INCLUIR AUTORES
-        * QUANDO FOR PERCORRER OS LIVROS, PERCORRER AO MESMO TEMPO A LISTA DE AUTORES
-*/
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
     struct Autor *proximoAutor;
@@ -166,23 +158,33 @@ void AlterarLivro(Lista_Livros *biblioteca){
     RelatorioLivros(biblioteca);
     printf("Digite o ID do livro que deseja fazer alteraçoes\n");
     scanf(" %d", &idAlteraLivro);
+    system("cls");
+    if(livroAlterado->idlivro == idAlteraLivro){
+        printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
+        system("pause");
 
-    while(livroAlterado->idlivro!=idAlteraLivro){
-        livroAlterado=livroAlterado->proximoLivro;
+        printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Ano \n4)Editora\n");
+    }else{
+        while(livroAlterado->idlivro!=idAlteraLivro && livroAlterado->proximoLivro != NULL){
+            livroAlterado=livroAlterado->proximoLivro;
+        }
+        if(livroAlterado->idlivro == idAlteraLivro){
+            printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
+            system("pause");
+
+            printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Ano \n4)Editora\n");
+        }else{
+            printf("\nO livro não existe\n");
+        }
     }
-    printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
-    system("pause");
-
-    printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Ano \n4)Editora\n");
 }
-
 
 void iniciarListaUsuario(Lista_Usuarios *caderno){
     caderno->primeiro_usuario = NULL;
     caderno->tam = 0;
 }
 
-void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char NomeUser[], char endereco[] ){
+void IncluirUsuario(Lista_Usuarios *caderno, int idUser, char telefone[], char NomeUser[], char endereco[]){
     Usuario *novousuario , *usuario;
     novousuario=malloc(sizeof(Usuario));
     if(novousuario){
@@ -235,30 +237,57 @@ void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
     printf("Digite a ID do usuario que deseja alterar\n");
 
     scanf("%d", &idAltera);
-
-    while(novousuario->idUser != idAltera){
-        novousuario = novousuario->proximoUsuario;
-    }
     system("cls");
-    printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
-    printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
-    scanf("%d", &resposta);
-    switch (resposta){
-    case 1: 
-        printf("Digite o novo nome: ");
-        scanf(" %[^\n]", novousuario->nomeUser);
-        break;
-    case 2:
-        printf("Digite o numero do novo telefone: ");
-        scanf(" %[^\n]", novousuario->telefone);
-        break;
-    case 3:
-        printf("Digite o novo endereço: ");
-        scanf(" %[^\n]", novousuario->endereco);
 
-        break;
-    default:
-        printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
+    if(novousuario->idUser == idAltera){
+        printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
+        printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
+        scanf("%d", &resposta);
+        switch (resposta){
+        case 1: 
+            printf("Digite o novo nome: ");
+            scanf(" %[^\n]", novousuario->nomeUser);
+            break;
+        case 2:
+            printf("Digite o numero do novo telefone: ");
+            scanf(" %[^\n]", novousuario->telefone);
+            break;
+        case 3:
+            printf("Digite o novo endereço: ");
+            scanf(" %[^\n]", novousuario->endereco);
+
+            break;
+        default:
+            printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
+        }
+    }else{
+        while(novousuario->idUser != idAltera && novousuario->proximoUsuario != NULL){
+            novousuario = novousuario->proximoUsuario;
+        }
+        if(novousuario->idUser == idAltera){
+            printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
+            printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
+            scanf("%d", &resposta);
+            switch (resposta){
+            case 1: 
+                printf("Digite o novo nome: ");
+                scanf(" %[^\n]", novousuario->nomeUser);
+                break;
+            case 2:
+                printf("Digite o numero do novo telefone: ");
+                scanf(" %[^\n]", novousuario->telefone);
+                break;
+            case 3:
+                printf("Digite o novo endereço: ");
+                scanf(" %[^\n]", novousuario->endereco);
+
+                break;
+            default:
+                printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
+            }
+        }else{
+            printf("\nO usuário não existe\n");
+        }
     }
 }
 
