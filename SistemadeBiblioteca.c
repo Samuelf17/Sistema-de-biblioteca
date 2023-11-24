@@ -50,9 +50,8 @@ typedef struct Lista_Usuarios{
 }Lista_Usuarios;
 
 typedef struct Reserva{
-    int dataInicio, dataFim;
-    Usuario idUser;
-    Livro idLivro;
+    char dataInicio[11], dataFim[11];
+    int idUser, idLivro;
     struct Reserva *proximoReserva;
 }Reserva;
 
@@ -404,17 +403,71 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
     }
 }
 
+void IniciarListaReserva(Lista_Reservas *cadernoReservas){
+    cadernoReservas->primeiraReserva = NULL;
+    cadernoReservas->tam=0;
+}
+
+void IncluirReserva(Lista_Reservas *cadernoReservas, char dataInicio[], char dataFinal[], int idUser, int IdLivro){
+    Reserva *novaReserva, *reservas;
+    novaReserva=malloc(sizeof(Reserva));
+    strcpy(novaReserva->dataInicio, dataInicio);
+    strcpy(novaReserva->dataFim, dataFinal);
+    novaReserva->idLivro = IdLivro;
+    novaReserva->idUser = idUser;
+    novaReserva->proximoReserva = NULL;
+    if(cadernoReservas->primeiraReserva == NULL){
+        cadernoReservas->primeiraReserva = novaReserva;
+    }else{
+        reservas = cadernoReservas->primeiraReserva;
+        while(reservas->proximoReserva != NULL){
+            reservas = reservas->proximoReserva;
+        }
+        reservas->proximoReserva = novaReserva;
+    }
+    cadernoReservas->tam++;
+    printf("\nReserva feita com sucesso\n");
+}   
+
+void RelatorioReservas(Lista_Reservas *cadernoReservas, Lista_Livros *biblioteca, Lista_Usuarios *cadernoUsuarios){
+    Reserva *reservas = cadernoReservas->primeiraReserva;
+
+    while(reservas){
+        Usuario *usuario = cadernoUsuarios->primeiro_usuario;
+        Livro *livro = biblioteca->primeiroLivro;
+        while(livro->idlivro != reservas->idLivro){
+            livro=livro->proximoLivro;
+        }
+        while(usuario->idUser != reservas->idUser){
+            usuario=usuario->proximoUsuario;
+        }
+        printf("\nUSUÁRIO:\n");
+        printf("Nome: %s | ", usuario->nomeUser);
+        printf("ID: %d | ", reservas->idUser);
+        printf("Telefone: %s | ", usuario->telefone);
+        printf("Endereço: %s\n", usuario->endereco);
+        printf("LIVRO:\n");
+        printf("Nome: %s | ", livro->tituloLivro);
+        printf("ID: %d\n", reservas->idLivro);
+        printf("Data de início: %s | ", reservas->dataInicio);
+        printf("Data de fim: %s \n\n", reservas->dataFim);
+        reservas = reservas->proximoReserva;
+    }
+}
+
 int main(){
     setlocale(LC_ALL,"Portuguese");
-    int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro, anoLivro;
-    char nomeUSer[50], endereco[100], nomeLivro[100], editora[50], telefone[15];
+    int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro, anoLivro, idUserReserva, idLivroReserva;
+    char nomeUSer[50], endereco[100], nomeLivro[100], editora[50], telefone[15], dataInicioReserva[11], dataFimReserva[11];
     Lista_Usuarios cadernoUsuarios;
     Lista_Livros biblioteca;
     Lista_Autor cadernoAutores;
+    Lista_Reservas cadernoReservas;
 
     iniciarListaUsuario(&cadernoUsuarios);
     IniciaListaLivro(&biblioteca);
     IniciaAutor(&cadernoAutores);
+    IniciarListaReserva(&cadernoReservas);
 
     while(resMenu != 5){
         printf("Menu:\n");
@@ -510,6 +563,34 @@ int main(){
                 
             case 3:
                 system("cls");
+                printf("Menu:\n");
+                printf("1.Incluir Reserva\n");
+                printf("2.Alterar Reserva\n");
+                printf("3.Excluir Reserva\n");
+                printf("4.Voltar\n");
+                printf("Digite a opção que você deseja: ");
+                scanf(" %d", &resSubMenu);
+                switch(resSubMenu){
+                    case 1:
+                        system("cls");
+                        printf("Usuários cadastrados:\n");
+                        RelatorioUsuario(&cadernoUsuarios);
+                        printf("\nDigite a ID do usuário que irá fazer a reserva: ");
+                        scanf(" %d", &idUserReserva);
+                        system("cls");
+                        printf("Livros cadastrados:\n");
+                        RelatorioLivros(&biblioteca);
+                        printf("Digite o livro que será reservado: ");
+                        scanf(" %d", &idLivroReserva);
+                        system("cls");
+                        printf("Digite a data de inicio da reserva: ");
+                        scanf(" %[^\n]", dataInicioReserva);
+                        printf("Digite a data do fim da reserva: ");
+                        scanf(" %[^\n]", dataFimReserva);
+                        IncluirReserva(&cadernoReservas, dataInicioReserva, dataFimReserva, idUserReserva, idLivroReserva);
+                        system("pause");
+                }
+
                 break;
             case 4:
                 system("cls");
@@ -535,6 +616,10 @@ int main(){
                         system("pause");
                         break;
                     case 3:
+                        system("cls");
+                        printf("Relatório de Reservas:\n");
+                        RelatorioReservas(&cadernoReservas, &biblioteca, &cadernoUsuarios);
+                        system("pause");
                         break;
                     case 4:
                         break;
