@@ -134,7 +134,7 @@ void RelatorioLivros(Lista_Livros *biblioteca){
         while(livros){
             autores = livros->primeiroautor;
             printf("Id: %d |", livros->idlivro);
-            printf(" Nome: %s|", livros->tituloLivro);
+            printf(" Nome: %s |", livros->tituloLivro);
             printf(" Edição: %d  |", livros->edicao);
             printf(" Editora: %s |", livros->editora);
             printf(" Ano: %d |", livros->ano);
@@ -176,6 +176,31 @@ void AlterarLivro(Lista_Livros *biblioteca){
         }else{
             printf("\nO livro não existe\n");
         }
+    }
+}
+
+void ExcluirLivro(Lista_Livros *biblioteca){
+    int idLivroExcluido;
+    Livro *livroExcluido, *removido;
+    livroExcluido = biblioteca->primeiroLivro;
+    if(livroExcluido){
+        RelatorioLivros(biblioteca);
+        printf("Digite a ID do livro que deseja excluir: ");
+        scanf(" %d", &idLivroExcluido);
+        if(livroExcluido->idlivro == idLivroExcluido){
+            removido = livroExcluido;
+            biblioteca->primeiroLivro = livroExcluido->proximoLivro;
+        }else{
+            while(livroExcluido->proximoLivro->idlivro != idLivroExcluido && livroExcluido->proximoLivro != NULL){
+                livroExcluido = livroExcluido->proximoLivro;
+            }
+            removido = livroExcluido->proximoLivro;
+            livroExcluido->proximoLivro = removido->proximoLivro;
+        }
+        printf("\nO seguinte livro foi apagado:\n | ID: %d | Nome: %s | Editora: %s | Lançamento: %d | Edição: %d\n", removido->idlivro, removido->tituloLivro, removido->editora, removido->ano, removido->edicao);
+        free(removido);
+    }else{
+        printf("\nNão há livros cadastrados\n");
     }
 }
 
@@ -298,30 +323,23 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
     aux =cadernoUsuario->primeiro_usuario;
     usuarioremovido = cadernoUsuario->primeiro_usuario;
     if(cadernoUsuario->primeiro_usuario){
-
-    RelatorioUsuario(cadernoUsuario);
-    printf("Digite a ID do usuario que deseja apagar\n");
-    
-    scanf("%d", &idExcluido);
-    
-    if(aux->idUser == idExcluido){
+        RelatorioUsuario(cadernoUsuario);
+        printf("Digite a ID do usuario que deseja apagar\n");
         
-        cadernoUsuario->primeiro_usuario= aux->proximoUsuario;
-        usuarioremovido=aux;
-
-    }else{
-    
-    while(aux->proximoUsuario->idUser!=idExcluido && aux->proximoUsuario != NULL){
-        aux = aux->proximoUsuario;
-    }
-
-    usuarioremovido = aux->proximoUsuario;
-    aux->proximoUsuario = usuarioremovido->proximoUsuario;
-    }
-
-    printf("O seguinte usuario foi apagado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",usuarioremovido->idUser ,usuarioremovido->nomeUser , usuarioremovido->telefone, usuarioremovido->endereco);
+        scanf("%d", &idExcluido);
         
-    free(usuarioremovido);
+        if(aux->idUser == idExcluido){
+            cadernoUsuario->primeiro_usuario = aux->proximoUsuario;
+            usuarioremovido=aux;
+        }else{
+            while(aux->proximoUsuario->idUser!=idExcluido && aux->proximoUsuario != NULL){
+                aux = aux->proximoUsuario;
+            }
+            usuarioremovido = aux->proximoUsuario;
+            aux->proximoUsuario = usuarioremovido->proximoUsuario;
+        }
+        printf("O seguinte usuario foi apagado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",usuarioremovido->idUser ,usuarioremovido->nomeUser , usuarioremovido->telefone, usuarioremovido->endereco);
+        free(usuarioremovido);
     }else{
         printf("\n Não há usuarios cadastrados \n");
     }
@@ -420,6 +438,9 @@ int main(){
                     system("pause");
                         break;
                     case 3:
+                        system("cls");
+                        ExcluirLivro(&biblioteca);
+                        system("pause");
                         break;
                     case 4:
                         break;
