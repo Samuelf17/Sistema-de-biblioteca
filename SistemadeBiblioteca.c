@@ -3,6 +3,19 @@
 #include <string.h>
 #include <locale.h>
 
+/*
+    IDEIAS PARA RESERVA:
+    Perguntas:
+    * Um usuário pode pegar mais de um livro?
+    * O mesmo livro pode ser pego por mais de um usuário?
+    
+    Requisitos:
+    * Salvar as ids do usuario e do livro
+    * Quando aparecer na tela pesquisamos a id na lista de usuario e livro
+    * Precisa ser possivel modificar as ids do usuario e da lista e as datas
+    * Aparecer na tela todos os dados do usuario e a id e nome do livro reservado, alem das datas
+*/
+
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
     struct Autor *proximoAutor;
@@ -225,8 +238,7 @@ void AlterarLivro(Lista_Livros *biblioteca){
     }
 }
 
-void ExcluirLivro(Lista_Livros *biblioteca){
-    
+void ExcluirLivro(Lista_Livros *biblioteca){  
     int idLivroExcluido;
     Livro *livroExcluido, *removido;
     livroExcluido = biblioteca->primeiroLivro;
