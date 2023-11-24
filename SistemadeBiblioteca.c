@@ -226,6 +226,7 @@ void AlterarLivro(Lista_Livros *biblioteca){
 }
 
 void ExcluirLivro(Lista_Livros *biblioteca){
+    
     int idLivroExcluido;
     Livro *livroExcluido, *removido;
     livroExcluido = biblioteca->primeiroLivro;
