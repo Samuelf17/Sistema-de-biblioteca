@@ -3,19 +3,6 @@
 #include <string.h>
 #include <locale.h>
 
-/*
-    IDEIAS PARA RESERVA:
-    Perguntas:
-    * Um usuário pode pegar mais de um livro?
-    * O mesmo livro pode ser pego por mais de um usuário?
-    
-    Requisitos:
-    * Salvar as ids do usuario e do livro
-    * Quando aparecer na tela pesquisamos a id na lista de usuario e livro
-    * Precisa ser possivel modificar as ids do usuario e da lista e as datas
-    * Aparecer na tela todos os dados do usuario e a id e nome do livro reservado, alem das datas
-*/
-
 typedef struct Autor{
     char nomeA[100],instituicao[100];   
     struct Autor *proximoAutor;
@@ -141,11 +128,10 @@ void RelatorioLivros(Lista_Livros *biblioteca){
     Livro *livros;
     livros = biblioteca->primeiroLivro;
     Autor *autores;
-    autores = livros->primeiroautor;
-    if(livros){
+    if(livros != NULL){
         while(livros){
             autores = livros->primeiroautor;
-            printf("Id: %d |", livros->idlivro);
+            printf("| Id: %d |", livros->idlivro);
             printf(" Nome: %s |", livros->tituloLivro);
             printf(" Edição: %d  |", livros->edicao);
             printf(" Editora: %s |", livros->editora);
@@ -159,7 +145,7 @@ void RelatorioLivros(Lista_Livros *biblioteca){
             livros=livros->proximoLivro;
         }
     }else{
-        printf("\nBiblioteca vazia\n");
+        printf("\nBiblioteca vazia\n\n");
     }
 }
 
@@ -167,72 +153,73 @@ void AlterarLivro(Lista_Livros *biblioteca){
     Livro *livroAlterado;
     int idAlteraLivro, resp;
     livroAlterado = biblioteca->primeiroLivro;
+    printf("Livros cadastrados:\n");
     RelatorioLivros(biblioteca);
-    printf("Digite o ID do livro que deseja fazer alteraçoes\n");
-    scanf(" %d", &idAlteraLivro);
-    system("cls");
-    if(livroAlterado->idlivro == idAlteraLivro){
-        printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
-        system("pause");
-
-        printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Editora \n4)Ano\n");
-        scanf(" %d", &resp);
-            switch (resp){
-            case 1:
-                    printf("Digite o novo nome\n");
-                    scanf(" %[^\n]",livroAlterado->tituloLivro);
-                    break;
-            case 2:
-                    printf("Reinsira a edição\n");
-                    scanf(" %d",&livroAlterado->edicao);
-                    break;
-            case 3:
-                    printf("Digite a nova Editora\n");
-                    scanf(" %[^\n]",livroAlterado->editora);
-                    break;
-
-            case 4: 
-                    printf("Reinsira ano\n");
-                    scanf(" %d",&livroAlterado->ano);
-                    break;
-
-            default:printf("Opção invalida\n");
-            break;
-            }
-    }else{
-        while(livroAlterado->idlivro!=idAlteraLivro && livroAlterado->proximoLivro != NULL){
-            livroAlterado=livroAlterado->proximoLivro;
-        }
+    if(livroAlterado){
+        printf("Digite o ID do livro que deseja fazer alteraçoes\n");
+        scanf(" %d", &idAlteraLivro);
+        system("cls");
         if(livroAlterado->idlivro == idAlteraLivro){
             printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
-            system("pause");
-
             printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Editora \n4)Ano\n");
             scanf(" %d", &resp);
-            switch (resp){
-            case 1:
-                    printf("Digite o novo nome\n");
-                    scanf(" %[^\n]",livroAlterado->tituloLivro);
-                    break;
-            case 2:
-                    printf("Reinsira a edição\n");
-                    scanf(" %d",&livroAlterado->edicao);
-                    break;
-            case 3:
-                    printf("Digite a nova Editora\n");
-                    scanf(" %[^\n]",livroAlterado->editora);
-                    break;
+                switch (resp){
+                case 1:
+                        printf("Digite o novo nome\n");
+                        scanf(" %[^\n]",livroAlterado->tituloLivro);
+                        break;
+                case 2:
+                        printf("Reinsira a edição\n");
+                        scanf(" %d",&livroAlterado->edicao);
+                        break;
+                case 3:
+                        printf("Digite a nova Editora\n");
+                        scanf(" %[^\n]",livroAlterado->editora);
+                        break;
 
-            case 4: 
-                    printf("Reinsira ano\n");
-                    scanf(" %d",&livroAlterado->ano);
-                    break;
+                case 4: 
+                        printf("Reinsira ano\n");
+                        scanf(" %d",&livroAlterado->ano);
+                        break;
 
-            default:printf("Opção invalida\n");
-            break;
-            }
+                default:printf("Opção invalida\n");
+                break;
+                }
         }else{
-            printf("\nO livro não existe\n");
+            while(livroAlterado->idlivro!=idAlteraLivro && livroAlterado->proximoLivro != NULL){
+                livroAlterado=livroAlterado->proximoLivro;
+            }
+            if(livroAlterado->idlivro == idAlteraLivro){
+                printf("Usuario selecionado:\n | ID: %d | Nome: %s | Edição: %d | Editora: %s | Ano: %d\n",livroAlterado->idlivro ,livroAlterado->tituloLivro , livroAlterado->edicao, livroAlterado->editora, livroAlterado->ano);
+                system("pause");
+
+                printf("O que deseja alterar?\n1)Titulo \n2)Edição \n3)Editora \n4)Ano\n");
+                scanf(" %d", &resp);
+                switch (resp){
+                case 1:
+                        printf("Digite o novo nome\n");
+                        scanf(" %[^\n]",livroAlterado->tituloLivro);
+                        break;
+                case 2:
+                        printf("Reinsira a edição\n");
+                        scanf(" %d",&livroAlterado->edicao);
+                        break;
+                case 3:
+                        printf("Digite a nova Editora\n");
+                        scanf(" %[^\n]",livroAlterado->editora);
+                        break;
+
+                case 4: 
+                        printf("Reinsira ano\n");
+                        scanf(" %d",&livroAlterado->ano);
+                        break;
+
+                default:printf("Opção invalida\n");
+                break;
+                }
+            }else{
+                printf("\nO livro não existe\n");
+            }
         }
     }
 }
@@ -241,6 +228,8 @@ void ExcluirLivro(Lista_Livros *biblioteca){
     int idLivroExcluido;
     Livro *livroExcluido, *removido;
     livroExcluido = biblioteca->primeiroLivro;
+    printf("Livros cadastrados:\n");
+    RelatorioLivros(biblioteca);
     if(livroExcluido){
         RelatorioLivros(biblioteca);
         printf("Digite a ID do livro que deseja excluir: ");
@@ -257,8 +246,6 @@ void ExcluirLivro(Lista_Livros *biblioteca){
         }
         printf("\nO seguinte livro foi apagado:\n | ID: %d | Nome: %s | Editora: %s | Lançamento: %d | Edição: %d\n", removido->idlivro, removido->tituloLivro, removido->editora, removido->ano, removido->edicao);
         free(removido);
-    }else{
-        printf("\nNão há livros cadastrados\n");
     }
 }
 
@@ -299,14 +286,15 @@ void RelatorioUsuario(Lista_Usuarios *caderno){
     usuario = caderno->primeiro_usuario;
     if(usuario){
         while(usuario){
-            printf(" | Id: %d", usuario->idUser);
+            printf("| Id: %d", usuario->idUser);
             printf(" | Nome: %s", usuario->nomeUser);
             printf(" | Endereço: %s", usuario->endereco);
             printf(" | Telefone: %s\n", usuario->telefone);
             usuario=usuario->proximoUsuario;
         }
+        printf("\n");
     }else{
-        printf("\nSem usuários cadastrados\n");
+        printf("\nSem usuários cadastrados\n\n");
     }
 }
 
@@ -316,37 +304,14 @@ void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
     novousuario = cadernoUsuario->primeiro_usuario;
 
     int idAltera;
+    printf("Usuários cadastrados:\n");
     RelatorioUsuario(cadernoUsuario);
-    printf("Digite a ID do usuario que deseja alterar\n");
+    if(novousuario){
+        printf("Digite a ID do usuario que deseja alterar\n");
 
-    scanf("%d", &idAltera);
-    system("cls");
+        scanf("%d", &idAltera);
+        system("cls");
 
-    if(novousuario->idUser == idAltera){
-        printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
-        printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
-        scanf("%d", &resposta);
-        switch (resposta){
-        case 1: 
-            printf("Digite o novo nome: ");
-            scanf(" %[^\n]", novousuario->nomeUser);
-            break;
-        case 2:
-            printf("Digite o numero do novo telefone: ");
-            scanf(" %[^\n]", novousuario->telefone);
-            break;
-        case 3:
-            printf("Digite o novo endereço: ");
-            scanf(" %[^\n]", novousuario->endereco);
-
-            break;
-        default:
-            printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
-        }
-    }else{
-        while(novousuario->idUser != idAltera && novousuario->proximoUsuario != NULL){
-            novousuario = novousuario->proximoUsuario;
-        }
         if(novousuario->idUser == idAltera){
             printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
             printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
@@ -369,7 +334,33 @@ void AlterarUsuario(Lista_Usuarios *cadernoUsuario){
                 printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
             }
         }else{
-            printf("\nO usuário não existe\n");
+            while(novousuario->idUser != idAltera && novousuario->proximoUsuario != NULL){
+                novousuario = novousuario->proximoUsuario;
+            }
+            if(novousuario->idUser == idAltera){
+                printf("Usuario Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",novousuario->idUser ,novousuario->nomeUser , novousuario->telefone, novousuario->endereco);
+                printf("\n O que deseja alterar? \n 1)Nome \n 2) Telefone \n 3)Endereço \n\n");
+                scanf("%d", &resposta);
+                switch (resposta){
+                case 1: 
+                    printf("Digite o novo nome: ");
+                    scanf(" %[^\n]", novousuario->nomeUser);
+                    break;
+                case 2:
+                    printf("Digite o numero do novo telefone: ");
+                    scanf(" %[^\n]", novousuario->telefone);
+                    break;
+                case 3:
+                    printf("Digite o novo endereço: ");
+                    scanf(" %[^\n]", novousuario->endereco);
+
+                    break;
+                default:
+                    printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
+                }
+            }else{
+                printf("\nO usuário não existe\n");
+            }
         }
     }
 }
@@ -380,8 +371,9 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
     int idExcluido;
     aux =cadernoUsuario->primeiro_usuario;
     usuarioremovido = cadernoUsuario->primeiro_usuario;
+    printf("Usuários cadastrados:\n");
+    RelatorioUsuario(cadernoUsuario);
     if(cadernoUsuario->primeiro_usuario){
-        RelatorioUsuario(cadernoUsuario);
         printf("Digite a ID do usuario que deseja apagar\n");
         
         scanf("%d", &idExcluido);
@@ -398,8 +390,6 @@ void ExcluirUsuario(Lista_Usuarios *cadernoUsuario){
         }
         printf("O seguinte usuario foi apagado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n",usuarioremovido->idUser ,usuarioremovido->nomeUser , usuarioremovido->telefone, usuarioremovido->endereco);
         free(usuarioremovido);
-    }else{
-        printf("\n Não há usuarios cadastrados \n");
     }
 }
 
@@ -432,26 +422,40 @@ void IncluirReserva(Lista_Reservas *cadernoReservas, char dataInicio[], char dat
 void RelatorioReservas(Lista_Reservas *cadernoReservas, Lista_Livros *biblioteca, Lista_Usuarios *cadernoUsuarios){
     Reserva *reservas = cadernoReservas->primeiraReserva;
 
-    while(reservas){
-        Usuario *usuario = cadernoUsuarios->primeiro_usuario;
-        Livro *livro = biblioteca->primeiroLivro;
-        while(livro->idlivro != reservas->idLivro){
-            livro=livro->proximoLivro;
+    if(reservas){
+        while(reservas){
+            Usuario *usuario = cadernoUsuarios->primeiro_usuario;
+            Livro *livro = biblioteca->primeiroLivro;
+            while(livro->idlivro != reservas->idLivro){
+                livro=livro->proximoLivro;
+            }
+            Autor *autores = livro->primeiroautor;
+            while(usuario->idUser != reservas->idUser){
+                usuario=usuario->proximoUsuario;
+            }
+            printf("\nUSUÁRIO:\n");
+            printf("Nome: %s | ", usuario->nomeUser);
+            printf("ID: %d | ", reservas->idUser);
+            printf("Telefone: %s | ", usuario->telefone);
+            printf("Endereço: %s\n", usuario->endereco);
+            printf("LIVRO:\n");
+            printf("Nome: %s | ", livro->tituloLivro);
+            printf("ID: %d | ", reservas->idLivro);
+            printf("Edição: %d | ",livro->edicao);
+            printf("Editora: %s | ", livro->editora);
+            printf("Lançamento: %d | ", livro->ano);
+            while(autores){
+                printf("Autor: %s | ", autores->nomeA);
+                printf("Instituição: %s | ", autores->instituicao);
+                autores = autores->proximoAutor;
+            }
+            printf("\n");
+            printf("Data de início: %s | ", reservas->dataInicio);
+            printf("Data de fim: %s \n\n", reservas->dataFim);
+            reservas = reservas->proximoReserva;
         }
-        while(usuario->idUser != reservas->idUser){
-            usuario=usuario->proximoUsuario;
-        }
-        printf("\nUSUÁRIO:\n");
-        printf("Nome: %s | ", usuario->nomeUser);
-        printf("ID: %d | ", reservas->idUser);
-        printf("Telefone: %s | ", usuario->telefone);
-        printf("Endereço: %s\n", usuario->endereco);
-        printf("LIVRO:\n");
-        printf("Nome: %s | ", livro->tituloLivro);
-        printf("ID: %d\n", reservas->idLivro);
-        printf("Data de início: %s | ", reservas->dataInicio);
-        printf("Data de fim: %s \n\n", reservas->dataFim);
-        reservas = reservas->proximoReserva;
+    }else{
+        printf("\nNenhuma reserva cadastrada\n\n");
     }
 }
 
@@ -461,96 +465,116 @@ void AlterarReserva(Lista_Reservas *cadernoReservas, Lista_Livros *biblioteca, L
     Livro *livros = biblioteca->primeiroLivro;
     Usuario *usuarios=cadernoUsuario->primeiro_usuario;
     reservaAlterada = cadernoReservas->primeiraReserva;
+    printf("Reservas cadastradas:\n");
     RelatorioReservas(cadernoReservas, biblioteca, cadernoUsuario);
-    printf("Para selecionar a reserva que deseja alterar, digite a ID do usuario que reservou\n");
-    scanf(" %d", &Idresp);
-    system("cls");
-    while (reservaAlterada->idUser!=Idresp){
-        reservaAlterada = reservaAlterada->proximoReserva;
-    }
-    while(usuarios->idUser != reservaAlterada->idUser){
-        usuarios=usuarios->proximoUsuario;
-    }
-    while(livros->idlivro != reservaAlterada->idLivro){
-        livros=livros->proximoLivro;
-    }
-    if(reservaAlterada->idUser == Idresp){
-        printf("Usuário Selecionado:\n\nNome: %s | ID: %d | Telefone: %s | Endereço: %s \n", usuarios->nomeUser, usuarios->idUser, usuarios->telefone, usuarios->endereco);
-        printf("Livro:\nNome: %s | ID: %d\n", livros->tituloLivro, livros->idlivro);
-        printf("Data de inicio: %s | Data final: %s\n\n", reservaAlterada->dataInicio, reservaAlterada->dataFim);
-        printf("O que deseja alterar?\n 1)ID do Usuario\n 2)ID do Livro\n 3)Data de Inicio\n 4)Data Fim\n");
-        scanf(" %d",&caseresposta);
-        switch (caseresposta){
-        case 1: 
-            printf("Digite o novo ID de usuario\n");
-            scanf(" %d", &reservaAlterada->idUser);
-            break;
-        case 2: 
-            printf("Digite o novo ID do livro\n");
-            scanf(" %d", &reservaAlterada->idLivro);
-            break;
-        case 3: 
-            printf("Digite a nova data de incio\n");
-            scanf(" %[^\n]", reservaAlterada->dataInicio);
-            break;
-        case 4: 
-            printf("Digite a nova data final\n");
-            scanf(" %[^\n]", reservaAlterada->dataFim);
-            break;
-        default:
-            printf("Opcao invalida!");
-            break;
+    if(reservaAlterada){
+        printf("Para selecionar a reserva que deseja alterar, digite a ID do usuario que reservou\n");
+        scanf(" %d", &Idresp);
+        system("cls");
+        while (reservaAlterada->idUser!=Idresp){
+            reservaAlterada = reservaAlterada->proximoReserva;
         }
-    }else{
-        printf("Usuário Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n", usuarios->idUser, usuarios->nomeUser , usuarios->telefone, usuarios->endereco);
-        printf("Livro:\nNome: %s | ID: %d", livros->tituloLivro, livros->idlivro);
-        printf("O que deseja alterar?\n 1)ID do Usuario\n 2)ID do Livro\n 3)Data de Inicio\n 4)Data Fim\n");
-        scanf("%d",&caseresposta);
-        switch (caseresposta){
-        case 1: 
-            printf("Digite o novo ID de usuario\n");
-            scanf(" %d", &reservaAlterada->idUser);
-            break;
-        case 2: 
-            printf("Digite o novo ID do livro\n");
-            scanf(" %d", &reservaAlterada->idLivro);
-            break;
-        case 3: 
-            printf("Digite a nova data de incio\n");
-            scanf(" %[^\n]", reservaAlterada->dataInicio);
-            break;
-        case 4: 
-            printf("Digite a nova data final\n");
-            scanf(" %[^\n]", reservaAlterada->dataFim);
-            break;
-        default:
-            printf("Opcao invalida!");
-            break;
+        while(usuarios->idUser != reservaAlterada->idUser){
+            usuarios=usuarios->proximoUsuario;
+        }
+        while(livros->idlivro != reservaAlterada->idLivro){
+            livros=livros->proximoLivro;
+        }
+        if(reservaAlterada->idUser == Idresp){
+            printf("Usuário Selecionado:\n\nNome: %s | ID: %d | Telefone: %s | Endereço: %s \n", usuarios->nomeUser, usuarios->idUser, usuarios->telefone, usuarios->endereco);
+            printf("Livro:\nNome: %s | ID: %d\n", livros->tituloLivro, livros->idlivro);
+            printf("Data de inicio: %s | Data final: %s\n\n", reservaAlterada->dataInicio, reservaAlterada->dataFim);
+            printf("O que deseja alterar?\n 1)ID do Usuario\n 2)ID do Livro\n 3)Data de Inicio\n 4)Data Fim\n");
+            scanf(" %d",&caseresposta);
+            switch (caseresposta){
+            case 1: 
+                printf("Digite o novo ID de usuario\n");
+                scanf(" %d", &reservaAlterada->idUser);
+                break;
+            case 2: 
+                printf("Digite o novo ID do livro\n");
+                scanf(" %d", &reservaAlterada->idLivro);
+                break;
+            case 3: 
+                printf("Digite a nova data de incio\n");
+                scanf(" %[^\n]", reservaAlterada->dataInicio);
+                break;
+            case 4: 
+                printf("Digite a nova data final\n");
+                scanf(" %[^\n]", reservaAlterada->dataFim);
+                break;
+            default:
+                printf("Opcao invalida!");
+                break;
+            }
+        }else{
+            printf("Usuário Selecionado:\n | ID: %d | Nome: %s | Telefone: %s | Endereço: %s \n", usuarios->idUser, usuarios->nomeUser , usuarios->telefone, usuarios->endereco);
+            printf("Livro:\nNome: %s | ID: %d", livros->tituloLivro, livros->idlivro);
+            printf("O que deseja alterar?\n 1)ID do Usuario\n 2)ID do Livro\n 3)Data de Inicio\n 4)Data Fim\n");
+            scanf("%d",&caseresposta);
+            switch (caseresposta){
+            case 1: 
+                printf("Digite o novo ID de usuario\n");
+                scanf(" %d", &reservaAlterada->idUser);
+                break;
+            case 2: 
+                printf("Digite o novo ID do livro\n");
+                scanf(" %d", &reservaAlterada->idLivro);
+                break;
+            case 3: 
+                printf("Digite a nova data de incio\n");
+                scanf(" %[^\n]", reservaAlterada->dataInicio);
+                break;
+            case 4: 
+                printf("Digite a nova data final\n");
+                scanf(" %[^\n]", reservaAlterada->dataFim);
+                break;
+            default:
+                printf("Opcao invalida!");
+                break;
+            }
         }
     }
 }
 
-void ExcluirReserva(Lista_Reservas *cadernoReserva){
+void ExcluirReserva(Lista_Reservas *cadernoReserva, Lista_Livros *biblioteca, Lista_Usuarios *cadernoUsuario){
     Reserva *usuarioexcluido, *aux;
     int Idexcluido;
-    printf("Digite o ID do usuario que deseja excluir\n");
-    scanf(" %d",&Idexcluido);
+    printf("Reservas cadastradas:\n");
+    RelatorioReservas(cadernoReserva, biblioteca, cadernoUsuario);
     aux = cadernoReserva->primeiraReserva;
-    
-    if(aux->idUser == Idexcluido){
-        cadernoReserva->primeiraReserva = cadernoReserva->primeiraReserva->proximoReserva;
-        usuarioexcluido=aux;
-    }else{
-        while (aux->proximoReserva->idUser != Idexcluido){
-            aux= aux->proximoReserva;
+    if(aux){
+        printf("Digite o ID do usuario que deseja excluir\n");
+        scanf(" %d",&Idexcluido);
+        if(aux->idUser == Idexcluido){
+            cadernoReserva->primeiraReserva = cadernoReserva->primeiraReserva->proximoReserva;
+            usuarioexcluido=aux;
+        }else{
+            while (aux->proximoReserva->idUser != Idexcluido){
+                aux= aux->proximoReserva;
+            }
+            usuarioexcluido = aux->proximoReserva;
+            aux->proximoReserva = usuarioexcluido->proximoReserva;
         }
-        usuarioexcluido = aux->proximoReserva;
-        aux->proximoReserva = usuarioexcluido->proximoReserva;
+
+        free(usuarioexcluido);
     }
+}
 
-    free(usuarioexcluido);
+Livro* buscaLivro(Lista_Livros *biblioteca, int idLivro){
+    Livro *livros=biblioteca->primeiroLivro;
+    while(livros->idlivro != idLivro){
+        livros = livros->proximoLivro;
+    }
+    return livros;
+}
 
-
+Usuario* buscaUsuario(Lista_Usuarios *cadernoUsuarios, int idUsario){
+    Usuario *usuario=cadernoUsuarios->primeiro_usuario;
+    while(usuario->idUser != idUsario){
+        usuario = usuario->proximoUsuario;
+    }
+    return usuario;
 }
 
 int main(){
@@ -561,6 +585,8 @@ int main(){
     Lista_Livros biblioteca;
     Lista_Autor cadernoAutores;
     Lista_Reservas cadernoReservas;
+    Livro *livro;
+    Usuario *usuario;
 
     iniciarListaUsuario(&cadernoUsuarios);
     IniciaListaLivro(&biblioteca);
@@ -681,6 +707,10 @@ int main(){
                         printf("Digite o livro que será reservado: ");
                         scanf(" %d", &idLivroReserva);
                         system("cls");
+                        livro = buscaLivro(&biblioteca, idLivroReserva);
+                        usuario = buscaUsuario(&cadernoUsuarios, idUserReserva);
+                        printf("Usuario selecionado:\n| Id: %d | Nome: %s | Endereço: %s | Telefone: %s |\n", usuario->idUser, usuario->nomeUser, usuario->endereco, usuario->telefone);
+                        printf("Livro selecionado:\n| Id: %d | Nome: %s | Lançamento: %d | Edição: %d | Editora: %s |\n\n", livro->idlivro, livro->tituloLivro, livro->ano, livro->edicao, livro->editora);
                         printf("Digite a data de inicio da reserva: ");
                         scanf(" %[^\n]", dataInicioReserva);
                         printf("Digite a data do fim da reserva: ");
@@ -697,7 +727,7 @@ int main(){
 
                     case 3:
                         system("cls");
-                        ExcluirReserva(&cadernoReservas);
+                        ExcluirReserva(&cadernoReservas, &biblioteca, &cadernoUsuarios);
                         system("pause");
                         break;
                 }
