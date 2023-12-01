@@ -4,15 +4,10 @@
 #include <locale.h>
 
 typedef struct Autor{
-    char nomeA[100],instituicao[100];   
+    char nomeA[100],instituicao[100]; 
     struct Autor *proximoAutor;
-}Autor; //????? 
+}Autor;
 
-typedef struct Lista_Autor{
-    Autor *inicioautor;
-    int tam;
-
-}Lista_Autor;
 typedef struct Livro{
     int idlivro, ano, edicao;
     char tituloLivro[100], editora[100];
@@ -47,12 +42,7 @@ typedef struct Lista_Reservas{
     int tam;
 }Lista_Reservas;
 
-void IniciaAutor(Lista_Autor *cadernoAutor){
-    cadernoAutor->inicioautor=NULL;
-    cadernoAutor->tam=0;
-}
-
-void IncluirAutor(Lista_Autor *cadernoAutor, char nomeAutor[], char instituicao[]){
+void IncluirAutor(Livro *livroSelecionado, char nomeAutor[], char instituicao[]){
     Autor *novoAutor;
     novoAutor = malloc(sizeof(Autor));
     Autor *aux;
@@ -60,17 +50,31 @@ void IncluirAutor(Lista_Autor *cadernoAutor, char nomeAutor[], char instituicao[
     strcpy(novoAutor->nomeA,nomeAutor);
     strcpy(novoAutor->instituicao,instituicao);
     novoAutor->proximoAutor=NULL;
-    if(cadernoAutor->inicioautor==NULL){
-        cadernoAutor->inicioautor=novoAutor;
+    if(livroSelecionado->primeiroautor==NULL){
+        livroSelecionado->primeiroautor=novoAutor;
     }else{
-        aux = cadernoAutor->inicioautor;
+        aux = livroSelecionado->primeiroautor;
         while(aux->proximoAutor!=NULL){
             aux=aux->proximoAutor;
         }
-
         aux->proximoAutor=novoAutor;
-        cadernoAutor->tam++;
     }
+}
+
+void ExcluirAutor(Livro *livro, char nomeAutor[]){
+    Autor *autores=livro->primeiroautor, *autorRemovido;
+    if(strcmp(autores->nomeA, nomeAutor) == 0){
+        livro->primeiroautor = autores->proximoAutor;
+        autorRemovido = autores;
+    }else{
+        while(strcmp(autores->proximoAutor->nomeA, nomeAutor) != 0){
+            autores = autores->proximoAutor;
+        }
+        autorRemovido = autores->proximoAutor;
+        autores->proximoAutor = autorRemovido->proximoAutor;
+    }
+    printf("\nO seguinte autor foi apagado:\n | Nome: %s | Instituição: %s\n", autorRemovido->nomeA, autorRemovido->instituicao); 
+    free(autorRemovido);
 
 }
 
@@ -83,17 +87,15 @@ void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, ch
    int resp;
    char autor[100], instituicao[100];
     Livro *novolivro, *aux; // ele é ponteiro pra usarmos alocação dinamica
-    Lista_Autor cadernoautor;
-    IniciaAutor(&cadernoautor);
 
     novolivro = malloc(sizeof(Livro));
-
+    novolivro->primeiroautor = NULL;
     do{
         printf("Digite o nome do autor: ");
         scanf(" %[^\n]", autor);
         printf("Digite o nome da Instituição: ");
         scanf(" %[^\n]", instituicao);
-        IncluirAutor(&cadernoautor,autor,instituicao);
+        IncluirAutor(novolivro,autor,instituicao);
 
         printf("Deseja adicionar mais autores? \n1) - Sim \n2)- Não \n\n");
         scanf("%d",&resp);
@@ -107,7 +109,6 @@ void IncluirLivro(Lista_Livros *biblioteca, int idLivro, int ano, int edicao, ch
     novolivro->edicao = edicao;
     strcpy(novolivro->tituloLivro,titulo);
     strcpy(novolivro->editora,editora);
-    novolivro->primeiroautor = cadernoautor.inicioautor;
     novolivro->proximoLivro=NULL;
 
     if(biblioteca->primeiroLivro==NULL){
@@ -229,7 +230,6 @@ void ExcluirLivro(Lista_Livros *biblioteca){
     Livro *livroExcluido, *removido;
     livroExcluido = biblioteca->primeiroLivro;
     printf("Livros cadastrados:\n");
-    RelatorioLivros(biblioteca);
     if(livroExcluido){
         RelatorioLivros(biblioteca);
         printf("Digite a ID do livro que deseja excluir: ");
@@ -580,17 +580,16 @@ Usuario* buscaUsuario(Lista_Usuarios *cadernoUsuarios, int idUsario){
 int main(){
     setlocale(LC_ALL,"Portuguese");
     int resMenu=1, resSubMenu, idUser=1, idLivro=1, edicaoLivro, anoLivro, idUserReserva, idLivroReserva;
-    char nomeUSer[50], endereco[100], nomeLivro[100], editora[50], telefone[15], dataInicioReserva[11], dataFimReserva[11];
+    char nomeUSer[50], endereco[100], nomeLivro[100], editora[50], telefone[15], dataInicioReserva[11], dataFimReserva[11], nomeAutor[50], instituicao[50];
     Lista_Usuarios cadernoUsuarios;
     Lista_Livros biblioteca;
-    Lista_Autor cadernoAutores;
     Lista_Reservas cadernoReservas;
     Livro *livro;
     Usuario *usuario;
+    Autor *autores;
 
     iniciarListaUsuario(&cadernoUsuarios);
     IniciaListaLivro(&biblioteca);
-    IniciaAutor(&cadernoAutores);
     IniciarListaReserva(&cadernoReservas);
 
     while(resMenu != 5){
@@ -650,7 +649,9 @@ int main(){
                 printf("1.Incluir Livro\n");
                 printf("2.Alterar Livro\n");
                 printf("3.Excluir Livro\n");
-                printf("4.Voltar\n");
+                printf("4.Incluir Autor\n");
+                printf("5.Excluir Autor\n");
+                printf("6.Voltar\n");
                 printf("Digite a opção que você deseja: ");
                 scanf(" %d", &resSubMenu);
 
@@ -679,6 +680,45 @@ int main(){
                         system("pause");
                         break;
                     case 4:
+                        system("cls");
+                        RelatorioLivros(&biblioteca);
+                        printf("Digite a Id do livro que você deseja incluir um autor: ");
+                        scanf(" %d", &idLivro);
+                        system("cls");
+                        livro = buscaLivro(&biblioteca, idLivro);
+                        autores = livro->primeiroautor;
+                        printf("Livro Selecionado:\n| Id: %d | Nome: %s ", livro->idlivro, livro->tituloLivro);
+                        while(autores){
+                            printf("| Autor: %s ", autores->nomeA);
+                            autores = autores->proximoAutor;
+                        }
+                        printf("\nDigite o nome do autor que você deseja incluir: ");
+                        scanf(" %[^\n]", nomeAutor);
+                        printf("Digite o nome da instituição do autor: ");
+                        scanf(" %[^\n]", instituicao);
+                        IncluirAutor(livro, nomeAutor, instituicao);
+                        printf("\nAutor incluído com sucesso!\n\n");
+                        system("pause");
+                        break;
+                    case 5:
+                        system("cls");
+                        RelatorioLivros(&biblioteca);
+                        printf("Digite a id do livro que voce deseja excluir o autor: ");
+                        scanf("%d", &idLivro);
+                        livro = buscaLivro(&biblioteca, idLivro);
+                        system("cls");
+                        printf("Livro Selecionado:\n| Nome: %s |", livro->tituloLivro);
+                        autores = livro->primeiroautor;
+                        while(autores){
+                            printf("| Autor: %s ", autores->nomeA);
+                            autores = autores->proximoAutor;
+                        }
+                        printf("\nDigite o nome do autor que você deseja excluir: ");
+                        scanf(" %[^\n]", nomeAutor);
+                        ExcluirAutor(livro, nomeAutor);
+                        system("pause");
+                        break;
+                    case 6:
                         break;
                     default:
                         printf("\nA opção digitada não existe.\nPor favor digite uma das opções do menu.");
